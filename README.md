@@ -9,13 +9,25 @@ You need to have python version >= 3.6.8
 pip3 install -r requirements.txt
 ```
 
-# Run the development server
+# Set up a database
 
 ```
 cd ./heritage/webapp
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+# Run the development server
+
+```
 python3 manage.py runserver
 ```
 
+# Create an admin user
+
+```
+python3 manage.py createsuperuser
+```
 
 
 

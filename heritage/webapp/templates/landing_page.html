@@ -1,0 +1,36 @@
+<table style="height: 34px;" width="1400">
+  <tbody>
+  <tr>
+    <td style="width: 124.8px;">B лесах</td>
+    <td style="width: 124.8px;">МАРШРУТЫ</td>
+    <td style="width: 124.8px;">ЗАМЕТКИ</td>
+    <td style="width: 125.6px;">ЛЮДИ</td>
+    <td style="width: 125.6px;">КАРТОТЕКА</td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+
+<table style="height: 34px;" width="1300">
+  <tbody>
+  <tr>
+    {% for text in texts %}
+      <td style="width: 124.8px;">
+        <h3>{{ text.title }}</h3>
+        <br>
+        {% for image in text.images.all %}
+          <img src="{{ image.image.url }}" width="70%">
+        {% endfor %}
+        <br>
+        {{ text.text }}
+        <br>
+        {{ text.author }}
+        <br>
+        {{ text.publication_date }}
+      </td>
+    {% endfor %}
+  </tr>
+  </tbody>
+</table>
+
