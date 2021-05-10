@@ -1,0 +1,12 @@
+from rest_framework import serializers
+from .models import Text, Tag
+
+class TextSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Text
+    fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Tag
+    fields = '__all__'
