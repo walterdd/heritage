@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import Text, Tag, Image
+from .models import *
 
 admin.site.register(Text)
-admin.site.register(Tag)
+admin.site.register(TextTag)
 admin.site.register(Image)
