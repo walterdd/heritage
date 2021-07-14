@@ -118,7 +118,7 @@ class Publication(models.Model):
   title = models.CharField(max_length=200)
   image = models.ForeignKey(Image, on_delete=models.CASCADE)
   texts = models.ManyToManyField(Text)
-  itinerary = models.ForeignKey(TextTag, on_delete=models.CASCADE)
+  itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE)
   publication_date = models.DateTimeField(auto_now_add=True)
 
 

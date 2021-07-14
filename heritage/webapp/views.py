@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import *
 from .utils import get_texts_and_tags_for_category, get_cards_and_tags_for_category
 from django.views import View
+from django.http import JsonResponse
+from .serializers import *
 
 
 class LandingPage(View):
@@ -16,8 +18,10 @@ class LandingPage(View):
   def get(self, request, *args, **kwargs):
     collections = Collection.objects.all().order_by("publication_date")
     publications = Publication.objects.all().order_by("publication_date")
-    data = {"collections" : collections, "publications": publications}
-    return render(request, template_name="landing_page.html", context=data)
+    data = {"collections" : CollectionSerializer(collections, many=True).data,
+     "publications": PublicationSerializer(publications, many=True).data}
+    return JsonResponse(data)
+#     return render(request, template_name="landing_page.html", context=data)
 
 
 class NotesList(View):
