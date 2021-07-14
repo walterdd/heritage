@@ -35,16 +35,18 @@ class FunctionTag(models.Model):
 class Image(models.Model):
   image = models.ImageField()
 
-class Text(models.Model):
-  # Categories corresponding to the sections of the site.
-  # Each text will be attributed to one of those categories.
-  class Category(models.TextChoices):
-    ITINERARIES = 'ITINERARIES', _('МАРШРУТЫ')
-    NOTES = 'NOTES', _('ЗАМЕТКИ')
-    PEOPLE = 'PEOPLE', _('ЛЮДИ')
-    CARDS = 'CARDS', _('КАРТОТЕКА')
+# Categories corresponding to the sections of the site.
+# Each text will be attributed to one of those categories.
+class Category(models.TextChoices):
+  ITINERARIES = 'ITINERARIES', _('МАРШРУТЫ')
+  NOTES = 'NOTES', _('ЗАМЕТКИ')
+  PEOPLE = 'PEOPLE', _('ЛЮДИ')
+  CARDS = 'CARDS', _('КАРТОТЕКА')
 
+class Text(models.Model):
   title = models.CharField(max_length=200)
+  subtitle = models.CharField(max_length=400, default="")
+  cover_image = models.ForeignKey(Image, related_name="cover_image", on_delete=models.CASCADE)
   text = models.TextField()
   author = models.CharField(max_length=30)
   tag = models.ForeignKey(TextTag, on_delete=models.CASCADE)
@@ -83,6 +85,7 @@ class Itinerary(models.Model):
   region_tag = models.ForeignKey(RegionTag, on_delete=models.CASCADE)
   # NOTE: A tricky part will be to display ItineraryStep in the right order.
   itinerary_sections = models.ManyToManyField(ItineraryStep)
+  publication_date = models.DateTimeField(auto_now_add=True)
 
 
 class Card(models.Model):
@@ -101,6 +104,10 @@ class Card(models.Model):
   related_itineraries = models.ManyToManyField(Itinerary)
   # Texts that mentioned the monument.
   related_texts = models.ManyToManyField(Text)
+  category = models.CharField(
+      max_length=20,
+      choices=Category.choices,
+  )
 
 
 class Collection(models.Model):

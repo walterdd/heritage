@@ -24,6 +24,21 @@ class StyleTagSerializer(serializers.ModelSerializer):
     model = StyleTag
     fields = ['name']
 
+class TimeTagSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = TimeTag
+    fields = ['name']
+
+class FunctionTagSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = FunctionTag
+    fields = ['name']
+
+class RegionTagSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = RegionTag
+    fields = ['name', 'region']
+
 class ItinerarySerializer(serializers.ModelSerializer):
   cover_image = ImageSerializer(read_only=True)
 

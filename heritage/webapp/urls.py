@@ -19,5 +19,9 @@ from . import views
 
 urlpatterns = [
     path('', views.LandingPage.as_view(), name='landing_page'),
+    path('notes', views.NotesList.as_view(), name='notes'),
+    path('people', views.PeopleList.as_view(), name='people'),
+    path('cards', views.CardsList.as_view(), name='cards'),
+    path('text/<int:text_id>', views.TextView.as_view(), name='text'),
     path('admin/', admin.site.urls),
 ]

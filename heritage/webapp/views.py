@@ -18,10 +18,13 @@ class LandingPage(View):
   def get(self, request, *args, **kwargs):
     collections = Collection.objects.all().order_by("publication_date")
     publications = Publication.objects.all().order_by("publication_date")
+    itineraries = Itinerary.objects.all().order_by("publication_date")
+    texts = Text.objects.all().order_by("publication_date")
     data = {"collections" : CollectionSerializer(collections, many=True).data,
-     "publications": PublicationSerializer(publications, many=True).data}
+     "publications": PublicationSerializer(publications, many=True).data,
+     "itineraries" : ItinerarySerializer(itineraries, many=True).data,
+     "texts" : TextSerializer(texts, many=True).data}
     return JsonResponse(data)
-#     return render(request, template_name="landing_page.html", context=data)
 
 
 class NotesList(View):
@@ -39,9 +42,9 @@ class NotesList(View):
        order.
   """
   def get(self, request, *args, **kwargs):
-    category = Text.Category.NOTES
+    category = Category.NOTES
     data = get_texts_and_tags_for_category(category, request)
-    return render(request, template_name="texts.html", context=data)
+    return JsonResponse(data)
 
 
 class PeopleList(View):
@@ -59,9 +62,9 @@ class PeopleList(View):
        order.
   """
   def get(self, request, *args, **kwargs):
-    category = Text.Category.PEOPLE
+    category = Category.PEOPLE
     data = get_texts_and_tags_for_category(category, request)
-    return render(request, template_name="texts.html", context=data)
+    return JsonResponse(data)
 
 
 class CardsList(View):
@@ -76,12 +79,12 @@ class CardsList(View):
        order.
   """
   def get(self, request, *args, **kwargs):
-    category = Text.Category.CARDS
+    category = Category.CARDS
     data = get_cards_and_tags_for_category(category, request)
-    return render(request, template_name="cards.html", context=data)
+    return JsonResponse(data)
 
 
-class Text(View):
+class TextView(View):
   """Renders a template for the page with a text given text primary key.
   """
   def get(self, request):
@@ -91,5 +94,5 @@ class Text(View):
     """
     text_pk = request.GET['text_id']
     text = Text.objects.get(id=text_pk)
-    data = {"text": text}
-    return render(request, template_name="text.html", context=data)
+    data = {"text": TextSerializer(text).data}
+    return JsonResponse(data)

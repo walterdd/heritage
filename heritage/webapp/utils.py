@@ -1,4 +1,5 @@
 from .models import *
+from .serializers import *
 
 def get_texts_and_tags_for_category(category, request):
   """Returns a dict with texts and tags corresponding to the category.
@@ -9,15 +10,17 @@ def get_texts_and_tags_for_category(category, request):
   Returns:
     dict with texts, tags found in these texts and category.
   """
-  tag_name = request.GET['tag_name'] if request.GET['tag_name'] else None
+  tag_name = request.GET['tag_name'] if 'tag_name' in request.GET else None
   if tag_name:
     texts = Text.objects.filter(category__exact=category).filter(tag__exact=tag_name).order_by("publication_date")
-    tags = Tag.objects.filter(pk=tag_name)
+    tags = TextTag.objects.filter(pk=tag_name)
   else:
     texts = Text.objects.filter(category__exact=category).order_by("publication_date")
     tags_ids = [text.tag for text in texts]
-    tags = Tag.objects.filter(pk__in=tags_ids).order_by("name")
-  return {"texts" : texts, "tags" : tags, "category" : category}
+    tags = TextTag.objects.filter(pk__in=tags_ids).order_by("name")
+  return {"texts" : TextSerializer(texts, many=True).data,
+          "tags" : TextTagSerializer(tags, many=True).data,
+          "category" : category}
 
 
 def get_cards_and_tags_for_category(category, request):
@@ -30,10 +33,10 @@ def get_cards_and_tags_for_category(category, request):
   Returns:
     dict with texts, tags found in these texts and category.
   """
-  style_tag_name = request.GET['style_tag_name'] if request.GET['style_tag_name'] else None
-  time_tag_name = request.GET['time_tag_name'] if request.GET['time_tag_name'] else None
-  function_tag_name = request.GET['function_tag_name'] if request.GET['function_tag_name'] else None
-  region_tag_name = request.GET['region_tag_name'] if request.GET['region_tag_name'] else None
+  style_tag_name = request.GET['style_tag_name'] if 'style_tag_name' in request.GET else None
+  time_tag_name = request.GET['time_tag_name'] if 'time_tag_name' in request.GET else None
+  function_tag_name = request.GET['function_tag_name'] if 'function_tag_name' in request.GET else None
+  region_tag_name = request.GET['region_tag_name'] if 'region_tag_name' in request.GET else None
 
   cards = Card.objects.filter(category__exact=category)
   if style_tag_name:
@@ -54,8 +57,8 @@ def get_cards_and_tags_for_category(category, request):
   region_tags_ids = [card.region_tag for card in cards]
   region_tags = RegionTag.objects.filter(pk__in=region_tags_ids).order_by("name")
   return {"cards" : cards,
-          "style_tags" : style_tags,
-          "function_tags": function_tags,
-          "time_tags": time_tags,
-          "region_tags": region_tags,
+          "style_tags" : StyleTagSerializer(style_tags, many=True).data,
+          "function_tags": FunctionTagSerializer(function_tags, many=True).data,
+          "time_tags": TimeTagSerializer(time_tags, many=True).data,
+          "region_tags": RegionTagSerializer(region_tags, many=True).data,
           "category" : category}
