@@ -43,12 +43,15 @@ class Category(models.TextChoices):
   PEOPLE = 'PEOPLE', _('ЛЮДИ')
   CARDS = 'CARDS', _('КАРТОТЕКА')
 
+class Author(models.Model):
+  name = models.CharField(max_length=200)
+
 class Text(models.Model):
   title = models.CharField(max_length=200)
   subtitle = models.CharField(max_length=400, default="")
   cover_image = models.ForeignKey(Image, related_name="cover_image", on_delete=models.CASCADE)
   text = models.TextField()
-  author = models.CharField(max_length=30)
+  author = models.ManyToManyField(Author)
   tag = models.ForeignKey(TextTag, on_delete=models.CASCADE)
   images = models.ManyToManyField(Image)
   publication_date = models.DateTimeField(auto_now_add=True)
