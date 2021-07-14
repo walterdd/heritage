@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from .models import *
 
+class AuthorSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Author
+    fields = '__all__'
+
+
 class ImageSerializer(serializers.ModelSerializer):
   class Meta:
     model = Image
@@ -14,6 +20,8 @@ class TextTagSerializer(serializers.ModelSerializer):
 class TextSerializer(serializers.ModelSerializer):
   tag = TextTagSerializer(read_only=True)
   images = ImageSerializer(many=True, read_only=True)
+  authors = AuthorSerializer(many=True, read_only=True)
+  cover_image = ImageSerializer(read_only=True)
 
   class Meta:
     model = Text
