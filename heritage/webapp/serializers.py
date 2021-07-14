@@ -12,19 +12,31 @@ class ImageSerializer(serializers.ModelSerializer):
     model = Image
     fields = '__all__'
 
-class TextTagSerializer(serializers.ModelSerializer):
+class PeopleGenreSerializer(serializers.ModelSerializer):
   class Meta:
-    model = TextTag
+    model = PeopleGenre
     fields = ['name']
 
-class TextSerializer(serializers.ModelSerializer):
-  tag = TextTagSerializer(read_only=True)
-  images = ImageSerializer(many=True, read_only=True)
-  authors = AuthorSerializer(many=True, read_only=True)
+class NoteGenreSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = NoteGenre
+    fields = ['name']
+
+class CategorySerializer(serializers.ModelSerializer):
   cover_image = ImageSerializer(read_only=True)
 
   class Meta:
-    model = Text
+    model = Category
+    fields = ['title', 'cover_image']
+
+class CardSerializer(serializers.ModelSerializer):
+  cover_image = ImageSerializer(read_only=True)
+  authors = AuthorSerializer(many=True, read_only=True)
+  cover_image = ImageSerializer(read_only=True)
+  category = CategorySerializer(read_only=True)
+
+  class Meta:
+    model = Card
     fields = '__all__'
 
 class StyleTagSerializer(serializers.ModelSerializer):
@@ -54,20 +66,26 @@ class ItinerarySerializer(serializers.ModelSerializer):
     model = Itinerary
     fields = '__all__'
 
-class CollectionSerializer(serializers.ModelSerializer):
-  texts = TextSerializer(many=True, read_only=True)
-  itineraries = ItinerarySerializer(many=True, read_only=True)
-  image = ImageSerializer(read_only=True)
-
-  class Meta:
-    model = Collection
-    fields = '__all__'
-
 class PublicationSerializer(serializers.ModelSerializer):
   image = ImageSerializer(read_only=True)
-  texts = TextSerializer(many=True, read_only=True)
-  itinerary = ItinerarySerializer(read_only=True)
+  cards = CardSerializer(many=True, read_only=True)
 
   class Meta:
-      model = Publication
-      fields = '__all__'
+    model = Publication
+    fields = '__all__'
+
+class PersonSerializer(serializers.ModelSerializer):
+  genre = PeopleGenreSerializer(read_only=True)
+  images = ImageSerializer(many=True, read_only=True)
+
+  class Meta:
+    model = Person
+    fields = '__all__'
+
+class NoteSerializer(serializers.ModelSerializer):
+  genre = NoteGenreSerializer(read_only=True)
+  images = ImageSerializer(many=True, read_only=True)
+
+  class Meta:
+    model = Person
+    fields = '__all__'

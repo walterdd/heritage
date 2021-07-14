@@ -1,90 +1,67 @@
 from django.shortcuts import render
 from .models import *
-from .utils import get_texts_and_tags_for_category, get_cards_and_tags_for_category
+from .utils import get_cards_and_tags_for_format, get_cards_and_tags_for_format
 from django.views import View
 from django.http import JsonResponse
 from .serializers import *
+from django.core.paginator import Paginator
 
 
 class LandingPage(View):
-  """Renders a template for the landing page.
-
-  Returns:
-    HttpResponse object with a rendered template.
-    Template takes two args:
-      publications: QuerySet of all publications ordered by the publication date.
-      collections: QuerySet of all collections ordered by the publication date.
+  """Serializes data to JSON for the landing page.
   """
-  def get(self, request, *args, **kwargs):
-    collections = Collection.objects.all().order_by("publication_date")
+  def get(self, request, it_page=1, text_page=1):
+    categories = Category.objects.all().order_by("title")
     publications = Publication.objects.all().order_by("publication_date")
-    itineraries = Itinerary.objects.all().order_by("publication_date")
-    texts = Text.objects.all().order_by("publication_date")
-    data = {"collections" : CollectionSerializer(collections, many=True).data,
+    itineraries = Card.objects.filter(format='ITINERARIES').order_by("publication_date")
+    cards = Card.objects.all().order_by("publication_date")
+
+    it_paginator = Paginator(itineraries, 4)
+    text_paginator = Paginator(cards, 1)
+    itineraries = it_paginator.page(it_page)
+    cards = text_paginator.page(text_page)
+
+    data = {"categories" : CategorySerializer(categories, many=True).data,
      "publications": PublicationSerializer(publications, many=True).data,
-     "itineraries" : ItinerarySerializer(itineraries, many=True).data,
-     "texts" : TextSerializer(texts, many=True).data}
+     "itineraries" : CardSerializer(itineraries, many=True).data,
+     "cards" : CardSerializer(cards, many=True).data,
+     "has_more_cards" : True,
+     "has_more_itineraries" : True}
     return JsonResponse(data)
 
 
 class NotesList(View):
-  """Renders a template for the page with texts from the Notes category.
+  """Serializes data to JSON with the cards for Notes format.
 
   Args:
-    request: HttpRequest, if request GET attribute contains 'tag_name', the results
-      will be filtered by the tag.
-  Returns:
-    HttpResponse object with a rendered template.
-    Template takes two args:
-      texts: QuerySet of all texts from the Notes category ordered by the
-       publication date.
-      tags: QuerySet of tags attributed to the selected texts in alphabetical
-       order.
+    request: HttpRequest, if request GET attribute contains 'tag_name', the
+     results will be filtered by the tag.
   """
   def get(self, request, *args, **kwargs):
-    category = Category.NOTES
-    data = get_texts_and_tags_for_category(category, request)
+    format = Card.Format.NOTES
+    data = get_texts_and_tags_for_format(format, request)
     return JsonResponse(data)
 
 
 class PeopleList(View):
-  """Renders a template for the page with texts from the People category.
-
-  Args:
-    request: HttpRequest, if request GET attribute contains 'tag_name', the results
-      will be filtered by the tag.
-  Returns:
-    HttpResponse object with a rendered template.
-    Template takes two args:
-      texts: QuerySet of all texts from the People category ordered by the
-       publication date.
-      tags: QuerySet of tags attributed to the selected texts in alphabetical
-       order.
+  """Serializes data to JSON with the cards for People format.
   """
   def get(self, request, *args, **kwargs):
-    category = Category.PEOPLE
-    data = get_texts_and_tags_for_category(category, request)
+    format = Card.Format.PEOPLE
+    data = get_texts_and_tags_for_format(format, request)
     return JsonResponse(data)
 
 
-class CardsList(View):
-  """Renders a template for the page with texts from the People category.
-
-  Returns:
-    HttpResponse object with a rendered template.
-    Template takes two args:
-      texts: QuerySet of all texts from the People category ordered by the
-       publication date.
-      tags: QuerySet of tags attributed to the selected texts in alphabetical
-       order.
+class MonumentsList(View):
+  """Serializes data to JSON with the cards for Monument format.
   """
   def get(self, request, *args, **kwargs):
-    category = Category.CARDS
-    data = get_cards_and_tags_for_category(category, request)
+    format = Card.Format.CARDS
+    data = get_cards_and_tags_for_format(format, request)
     return JsonResponse(data)
 
 
-class TextView(View):
+class CardView(View):
   """Renders a template for the page with a text given text primary key.
   """
   def get(self, request):
@@ -92,7 +69,7 @@ class TextView(View):
     :param request: HttpRequest, must contain 'text_id' in GET attributes.
     :return: HttpResponse with a rendered template.
     """
-    text_pk = request.GET['text_id']
-    text = Text.objects.get(id=text_pk)
-    data = {"text": TextSerializer(text).data}
+    card_pk = request.GET['card_id']
+    card = Card.objects.get(id=card_pk)
+    data = {"card": CardSerializer(card).data}
     return JsonResponse(data)
