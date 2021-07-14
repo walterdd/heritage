@@ -16,17 +16,17 @@ class LandingPage(View):
     itineraries = Card.objects.filter(format='ITINERARIES').order_by("publication_date")
     cards = Card.objects.all().order_by("publication_date")
 
-    it_paginator = Paginator(itineraries, 4)
-    text_paginator = Paginator(cards, 1)
-    itineraries = it_paginator.page(it_page)
-    cards = text_paginator.page(text_page)
+    it_paginator = Paginator(itineraries, 4, allow_empty_first_page=True)
+    text_paginator = Paginator(cards, 3, allow_empty_first_page=True)
+    itineraries = it_paginator.get_page(it_page)
+    cards = text_paginator.get_page(text_page)
 
     data = {"categories" : CategorySerializer(categories, many=True).data,
      "publications": PublicationSerializer(publications, many=True).data,
      "itineraries" : CardSerializer(itineraries, many=True).data,
      "cards" : CardSerializer(cards, many=True).data,
-     "has_more_cards" : True,
-     "has_more_itineraries" : True}
+     "has_more_cards" : cards.has_next(),
+     "has_more_itineraries" : itineraries.has_next()}
     return JsonResponse(data)
 
 
