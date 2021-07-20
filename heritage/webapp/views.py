@@ -1,6 +1,4 @@
-from django.shortcuts import render
-from .models import *
-from .utils import get_cards_and_tags_for_format, get_cards_and_tags_for_format
+from .utils import get_paginated_cards_for_genre_and_format
 from django.views import View
 from django.http import JsonResponse
 from .serializers import *
@@ -31,45 +29,38 @@ class LandingPage(View):
 
 
 class NotesList(View):
-  """Serializes data to JSON with the cards for Notes format.
-
-  Args:
-    request: HttpRequest, if request GET attribute contains 'tag_name', the
-     results will be filtered by the tag.
+  """Serializes data to JSON with the cards for Notes format filtered by genre.
   """
-  def get(self, request, *args, **kwargs):
+  def get(self, request, genre=None, page=1):
     format = Card.Format.NOTES
-    data = get_texts_and_tags_for_format(format, request)
-    return JsonResponse(data)
+    return get_paginated_cards_for_genre_and_format(format, genre, page)
 
 
 class PeopleList(View):
   """Serializes data to JSON with the cards for People format.
   """
-  def get(self, request, *args, **kwargs):
+  def get(self, request, genre=None, page=1):
     format = Card.Format.PEOPLE
-    data = get_texts_and_tags_for_format(format, request)
-    return JsonResponse(data)
+    return get_paginated_cards_for_genre_and_format(format, genre, page)
 
 
-class MonumentsList(View):
-  """Serializes data to JSON with the cards for Monument format.
-  """
-  def get(self, request, *args, **kwargs):
-    format = Card.Format.CARDS
-    data = get_cards_and_tags_for_format(format, request)
-    return JsonResponse(data)
+# class MonumentsList(View):
+#   """Serializes data to JSON with the cards for Monument format.
+#   """
+#   def get(self, request, tag, page):
+#     format = Card.Format.CARDS
+#     data = get_cards_for_tag_and_format(format, tag)
+#     return JsonResponse(data)
 
 
 class CardView(View):
   """Renders a template for the page with a text given text primary key.
   """
-  def get(self, request):
+  def get(self, request, card_id):
     """
     :param request: HttpRequest, must contain 'text_id' in GET attributes.
     :return: HttpResponse with a rendered template.
     """
-    card_pk = request.GET['card_id']
-    card = Card.objects.get(id=card_pk)
+    card = Card.objects.get(id=card_id)
     data = {"card": CardSerializer(card).data}
     return JsonResponse(data)
