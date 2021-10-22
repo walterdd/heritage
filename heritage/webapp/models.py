@@ -7,7 +7,7 @@ class Image(models.Model):
 
 
 class Author(models.Model):
-  name = models.CharField(max_length=200)
+  name = models.CharField(max_length=200, primary_key=True)
 
 
 class PeopleGenre(models.Model):
@@ -36,7 +36,7 @@ class Category(models.Model):
 
   Defined on the card level."""
   title = models.CharField(max_length=200)
-  cover_image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
+  cover_image = models.ImageField()
 
 
 class StyleTag(models.Model):
@@ -138,7 +138,7 @@ class Card(models.Model):
   objects of different formats, such as Person, Note, Monument and Itinerary."""
   title = models.CharField(max_length=200)
   subtitle = models.CharField(max_length=400, blank=True)
-  cover_image = models.ForeignKey(Image, on_delete=models.CASCADE, blank=True)
+  cover_image = models.ImageField()
   authors = models.ManyToManyField(Author, blank=True)
   publication_date = models.DateTimeField(auto_now_add=True)
   # Card can either contain one of: a person, a note, a monument or an itinerary.
@@ -170,7 +170,7 @@ class Publication(models.Model):
   Same as 'vypusk'."""
   title = models.CharField(max_length=200)
   subtitle = models.CharField(max_length=400, default='')
-  image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
+  image = models.ImageField()
   cards = models.ManyToManyField(Card)
   publication_date = models.DateTimeField(auto_now_add=True)
 

@@ -1,0 +1,111 @@
+{
+  "_comment": "Generated with http://www.objgen.com/json/models/8ySn",
+  "itineraries": [
+    {
+      "title": "Мир дворянской усадьбы на границе Тверской и Новгородской областей",
+      "subtitle": "Прямухино, Василево, Знаменское Раек",
+      "cover_image": "itinerary_1.png",
+      "authors": [
+        "Петя"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "МАРШРУТЫ"
+    },
+    {
+      "title": "Новая жизнь конструктивизма:",
+      "subtitle": "современные проекты ревитализации",
+      "cover_image": "itinerary_2.png",
+      "authors": [
+        "Маша",
+        "Вася"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "МАРШРУТЫ"
+    },
+    {
+      "title": "Исследуем кирхи Калининградской области",
+      "subtitle": "Большой список главных достопримечательностей региона",
+      "cover_image": "itinerary_3.png",
+      "authors": [
+        "Маша",
+        "Вася",
+        "Петя"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "МАРШРУТЫ"
+    },
+    {
+      "title": "Едем в Кенозерский национальный парк:",
+      "subtitle": "дзен и архаика на Русском Севере",
+      "cover_image": "itinerary_4.png",
+      "authors": [
+        "Маша"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "МАРШРУТЫ"
+    }
+  ],
+  "notes": [
+    {
+      "title": "Окно в современность:",
+      "subtitle": "архитектура советских вокзалов в регионах",
+      "cover_image": "note_1.png",
+      "authors": [
+        "Вася"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    },
+    {
+      "title": "Украинский след в сибирской архитектуре",
+      "subtitle": "Краткая история «сибирского барокко»",
+      "cover_image": "note_2.png",
+      "authors": [
+        "Петя"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    },
+    {
+      "title": "Архитекторы в лагерях:",
+      "subtitle": "забытый пласт архитектурного наследия",
+      "cover_image": "note_3.png",
+      "authors": [
+        "Петя"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    },
+    {
+      "title": "Есть ли будущее у руинированных памятников?",
+      "subtitle": "Разговор с Анор Тукаевой",
+      "cover_image": "note_4.png",
+      "authors": [
+        "Маша"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    },
+    {
+      "title": "Старообрядцы и коллекционеры:",
+      "subtitle": "жизнь купчихи Анны Мараевой",
+      "cover_image": "note_5.png",
+      "authors": [
+        "Вася"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    },
+    {
+      "title": "Исследуем кирхи Калининградской области",
+      "subtitle": "Большой список главных достопримечательностей региона",
+      "cover_image": "note_6.png",
+      "authors": [
+        "Вася",
+        "Маша"
+      ],
+      "publication_date": "21/04/2021",
+      "format": "ЗАМЕТКИ"
+    }
+  ]
+}
