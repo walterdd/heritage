@@ -20,21 +20,23 @@ def CreateCard(card_json, base_dir):
   tz = get_current_timezone()
   publication_date = tz.localize(
       datetime.strptime(card_json['publication_date'], '%d/%m/%Y'))
+  img_path = os.path.join(base_dir, card_json['cover_image'])
+  with open(img_path, 'rb') as f:
+    image = Image()
+    image.image.save(card_json['cover_image'], ContentFile(f.read()))
+    image.save()
   if not Card.objects.filter(title=card_json['title']):
     card = Card(title=card_json['title'],
                 subtitle=card_json['subtitle'],
                 publication_date=publication_date,
-                # cover_image=card_json['cover_image'],
+                cover_image=image,
                 format=card_json['format'])
-    img_path = os.path.join(base_dir, card_json['cover_image'])
-    with open(img_path, 'rb') as f:
-      card.cover_image.save(card_json['cover_image'], ContentFile(f.read()))
     card.save()
     for a in card_json['authors']:
       if not Author.objects.filter(name=a):
         author = Author(name=a)
         author.save()
-        card.authors.add(a)
+      card.authors.add(a)
 
 
 if __name__ == '__main__':
