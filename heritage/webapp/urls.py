@@ -13,14 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, re_path
-from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    re_path(r'^(?:(?P<it_page>\d+)/)?(?:(?P<text_page>\d+)/)?$', views.LandingPage.as_view(), name='landing_page'),
-    re_path(r'^notes/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$', views.NotesList.as_view(), name='notes'),
-    re_path(r'^people/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$', views.PeopleList.as_view(), name='people'),
-    path('card/<int:card_id>', views.CardView.as_view(), name='text'),
+    re_path(r'^(?:(?P<it_page>\d+)/)?(?:(?P<text_page>\d+)/)?$',
+            views.LandingPage.as_view(), name='landing_page'),
+    re_path(r'^notes/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$',
+            views.NotesList.as_view(), name='notes'),
+    re_path(r'^people/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$',
+            views.PeopleList.as_view(), name='people'),
+    re_path(r'^monuments/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$',
+            views.MonumentList.as_view(), name='monuments'),
+    path('article/<int:article_id>', views.ArticleView.as_view(),
+         name='article'),
 ]

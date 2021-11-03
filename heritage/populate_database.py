@@ -4,8 +4,6 @@ import sys
 import json
 import os
 from django.core.files.base import ContentFile
-from django.utils.timezone import get_current_timezone
-from datetime import datetime
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "heritage.settings")
@@ -17,26 +15,29 @@ SPEC_FILENAME = "spec.json"
 
 
 def CreateCard(card_json, base_dir):
-  tz = get_current_timezone()
-  publication_date = tz.localize(
-      datetime.strptime(card_json['publication_date'], '%d/%m/%Y'))
   img_path = os.path.join(base_dir, card_json['cover_image'])
   with open(img_path, 'rb') as f:
     image = Image()
     image.image.save(card_json['cover_image'], ContentFile(f.read()))
     image.save()
   if not Card.objects.filter(title=card_json['title']):
-    card = Card(title=card_json['title'],
-                subtitle=card_json['subtitle'],
-                publication_date=publication_date,
-                cover_image=image,
-                format=card_json['format'])
+    card = Card(title=str(card_json['title']),
+                subtitle=str(card_json['subtitle']),
+                cover_image=image)
     card.save()
     for a in card_json['authors']:
       if not Author.objects.filter(name=a):
         author = Author(name=a)
         author.save()
       card.authors.add(a)
+    if card_json['category'] in dict(Article.Category.choices):
+      article = Article(text=card_json["text"],
+                        category=card_json['category'],
+                        card=card)
+      article.save()
+    else:
+      raise NotImplemented("Category is not valid: %s" % card_json["category"])
+    card.save()
 
 
 if __name__ == '__main__':
@@ -51,8 +52,5 @@ if __name__ == '__main__':
   with open(spec_path, 'r') as json_data:
     test_data = json.loads(json_data.read())
 
-  for it in test_data["itineraries"]:
-    CreateCard(it, base_dir)
-
-  for n in test_data['notes']:
+  for n in test_data['articles']:
     CreateCard(n, base_dir)
