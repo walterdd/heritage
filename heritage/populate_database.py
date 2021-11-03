@@ -14,14 +14,20 @@ from webapp.models import *
 SPEC_FILENAME = "spec.json"
 
 
-def CreateCard(card_json, base_dir):
-  img_path = os.path.join(base_dir, card_json['cover_image'])
+def CreateImage(file_name, dir_path):
+  img_path = os.path.join(dir_path, file_name)
   with open(img_path, 'rb') as f:
     image = Image()
-    image.image.save(card_json['cover_image'], ContentFile(f.read()))
+    image.image.save(file_name, ContentFile(f.read()))
     image.save()
+  return image
+
+
+def CreateCard(card_json, dir_path):
+  image = CreateImage(card_json['cover_image'], dir_path)
   if not Card.objects.filter(title=card_json['title']):
-    card = Card(title=str(card_json['title']),
+    card = Card(id=str(card_json['id']),
+                title=str(card_json['title']),
                 subtitle=str(card_json['subtitle']),
                 cover_image=image)
     card.save()
@@ -40,17 +46,29 @@ def CreateCard(card_json, base_dir):
     card.save()
 
 
+def CreatePublication(pub_json, dir_path):
+  image = CreateImage(pub_json['cover_image'], dir_path)
+  pub = Publication(title=pub_json['title'], subtitle=pub_json['subtitle'],
+                    cover_image=image)
+  pub.save()
+  for card in pub_json["cards"]:
+    pub.cards.add(Card.objects.get(pk=card['id']))
+
+
 if __name__ == '__main__':
   assert (len(sys.argv) == 2), '''Path to the test directory should be passed as
    a first argument. It could be a relative or an absolute path. 
    Found argument list: %s''' % str(sys.argv)
-  base_dir = sys.argv[1]
-  print("Reading the test data from directory: %s...." % base_dir)
+  dir_path = sys.argv[1]
+  print("Reading the test data from directory: %s...." % dir_path)
 
-  spec_path = os.path.join(base_dir, SPEC_FILENAME)
+  spec_path = os.path.join(dir_path, SPEC_FILENAME)
 
   with open(spec_path, 'r') as json_data:
     test_data = json.loads(json_data.read())
 
   for n in test_data['articles']:
-    CreateCard(n, base_dir)
+    CreateCard(n, dir_path)
+
+  for pub in test_data['publications']:
+    CreatePublication(pub, dir_path)
