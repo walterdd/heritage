@@ -58,6 +58,30 @@ python3 manage.py runserver
 
 Open `http://127.0.0.1:8000/admin` in your browser.
 
+# Troubleshooting
+
+If after some changes in the database, while running a server you get an OperationalError, try updating your local database by doing the following:
+
+#### Clean up the database:
+```
+python3 manage.py flush
+```
+
+#### Make migrations:
+
+```
+python3 manage.py makemigrations
+```
+
+#### Migrate syncing the database:
+
+```
+python3 manage.py migrate --run-syncdb
+```
+
+#### Last resort
+If the steps above still didn't work, manually delete `db.sqlite3` file and rerun the commands above.
+
 
 
 
