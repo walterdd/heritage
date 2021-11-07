@@ -28,16 +28,6 @@ class Card(models.Model):
   Card stores all the required information to display an icon for this
   content unit. The link to the content itself is stored as a foreign key to the
   objects of different formats, such as Person, Note, Monument and Itinerary."""
-  title = models.CharField(max_length=200, blank=False)
-  subtitle = models.CharField(max_length=400, blank=True)
-  cover_image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True,
-                                  blank=True)
-  authors = models.ManyToManyField(Author, blank=True)
-  publication_date = models.DateTimeField(auto_now_add=True)
-  tags = models.ManyToManyField(Tag)
-
-
-class Article(models.Model):
 
   class Category(models.TextChoices):
     """Category define the highest-level taxonomy of articles.
@@ -47,12 +37,23 @@ class Article(models.Model):
     PEOPLE = 'PEOPLE', _('ЛЮДИ')
     MONUMENT = 'MONUMENT', _('ПАМЯТНИК')
 
-  text = models.TextField()
-  images = models.ManyToManyField(Image)
+  title = models.CharField(max_length=200, blank=False)
+  subtitle = models.CharField(max_length=400, blank=True)
   category = models.CharField(
       max_length=20,
       choices=Category.choices,
   )
+  cover_image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True,
+                                  blank=True)
+  authors = models.ManyToManyField(Author, blank=True)
+  publication_date = models.DateTimeField(auto_now_add=True)
+  tags = models.ManyToManyField(Tag)
+
+
+class Article(models.Model):
+  """Article represents a unique material."""
+  text = models.TextField()
+  images = models.ManyToManyField(Image)
   card = models.ForeignKey(Card, on_delete=models.CASCADE, blank=False,
                            related_name="article")
 

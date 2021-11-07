@@ -25,10 +25,15 @@ def CreateImage(file_name, dir_path):
 
 def CreateCard(card_json, dir_path):
   image = CreateImage(card_json['cover_image'], dir_path)
+  assert card_json['category'] in dict(Card.Category.choices), "Given unknown " \
+                                                               "category: %s"\
+                                                               % card_json[
+                                                                 'category']
   if not Card.objects.filter(title=card_json['title']):
     card = Card(id=str(card_json['id']),
                 title=str(card_json['title']),
                 subtitle=str(card_json['subtitle']),
+                category=card_json['category'],
                 cover_image=image)
     card.save()
     for a in card_json['authors']:
@@ -36,13 +41,9 @@ def CreateCard(card_json, dir_path):
         author = Author(name=a)
         author.save()
       card.authors.add(a)
-    if card_json['category'] in dict(Article.Category.choices):
-      article = Article(text=card_json["text"],
-                        category=card_json['category'],
-                        card=card)
-      article.save()
-    else:
-      raise NotImplemented("Category is not valid: %s" % card_json["category"])
+    article = Article(text=card_json["text"],
+                      card=card)
+    article.save()
     card.save()
 
 

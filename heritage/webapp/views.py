@@ -11,7 +11,7 @@ class LandingPage(View):
   def get(self, request, it_page=1, text_page=1):
     publications = Publication.objects.all().order_by("publication_date")
     itineraries = Card.objects.filter(
-        article__category=Article.Category.ITINERARY).order_by(
+        category=Card.Category.ITINERARY).order_by(
         "publication_date")
     cards = Card.objects.all().order_by("publication_date")
 
@@ -32,7 +32,7 @@ class NotesList(View):
   """Serializes data to JSON with the cards for Notes category.
   """
   def get(self, request, genre=None, page=1):
-    filter_category = Article.Category.NOTE
+    filter_category = Card.Category.NOTE
     return get_paginated_cards_for_category(filter_category, page)
 
 
@@ -40,7 +40,7 @@ class PeopleList(View):
   """Serializes data to JSON with the cards for People category.
   """
   def get(self, request, genre=None, page=1):
-    filter_category = Article.Category.PEOPLE
+    filter_category = Card.Category.PEOPLE
     return get_paginated_cards_for_category(filter_category, page)
 
 
@@ -48,7 +48,7 @@ class MonumentList(View):
   """Serializes data to JSON with the cards for Monument category.
   """
   def get(self, request, genre=None, page=1):
-    filter_category = Article.Category.MONUMENT
+    filter_category = Card.Category.MONUMENT
     return get_paginated_cards_for_category(filter_category, page)
 
 

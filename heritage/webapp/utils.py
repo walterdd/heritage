@@ -14,7 +14,7 @@ def get_paginated_cards_for_category(filter_category, page):
     JSON object with the page of cards and a boolean indicating if there is a
     next page.
   """
-  cards = Card.objects.filter(article__category=filter_category).order_by(
+  cards = Card.objects.filter(category=filter_category).order_by(
       "publication_date")
 
   paginator = Paginator(cards, 9, allow_empty_first_page=True)
