@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Image(models.Model):
   image = models.ImageField()
@@ -52,7 +52,7 @@ class Card(models.Model):
 
 class Article(models.Model):
   """Article represents a unique material."""
-  text = models.TextField()
+  text = RichTextUploadingField()
   images = models.ManyToManyField(Image)
   card = models.ForeignKey(Card, on_delete=models.CASCADE, blank=False,
                            related_name="article")

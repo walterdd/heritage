@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -121,8 +123,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -150,3 +153,22 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:3030',
 ]
+
+# CKeditor rich text editor settings
+# Images will be uploaded to the MEDIA_ROOT/CKEDITOR_UPLOAD_PATH
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# CKeditor toolbar configuration.
+# Configured with  https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#advanced
+CKEDITOR_CONFIGS = {
+    'default': {
+         'toolbar': [   ['Save', 'NewPage', 'ExportPdf', 'Preview'],
+                        ["Format", "Bold", "Italic", "Underline", "Strike", 'Subscript', 'Superscript', "SpellChecker"],
+                        ['NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
+                         'JustifyRight', 'JustifyBlock'],
+                        ["Image", "Table", 'HorizontalRule', "Link", "Unlink", "Anchor", "SectionLink", '-', 'Language', 'CreateDiv'],
+                        ['Undo', 'Redo'],
+                        ["Source"],
+                        ["Maximize"]],
+    },
+}
