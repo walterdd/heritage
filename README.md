@@ -54,7 +54,7 @@ python3 manage.py createsuperuser
 
 ```
 python manage.py collectstatic
-
+```
 
 ### 2) Run the server
 
