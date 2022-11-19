@@ -3,3 +3,4 @@ Pillow
 djangorestframework
 django-cors-headers
 django-ckeditor
+sorl-thumbnail
