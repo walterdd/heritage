@@ -25,6 +25,6 @@ urlpatterns = [
             views.PeopleList.as_view(), name='people'),
     re_path(r'^monuments/(?:(?P<genre>[a-z]+)/)?(?:(?P<page>\d+)/)?$',
             views.MonumentList.as_view(), name='monuments'),
-    path('article/<int:article_id>', views.ArticleView.as_view(),
+    re_path(r'^article/(?:(?P<article_id>\d+)/)$', views.ArticleView.as_view(),
          name='article'),
 ]
