@@ -1,13 +1,29 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ckeditor_uploader.fields import RichTextUploadingField
+from sorl.thumbnail import get_thumbnail
+from django.utils.html import format_html
+
+def _full_title(title, subtitle):
+  return f'{title} {subtitle}'
 
 class Image(models.Model):
   image = models.ImageField()
 
+  @property
+  def img_preview(self):
+      _thumbnail = get_thumbnail(self.image,'300x300',
+                                 upscale=False,
+                                 crop=False,
+                                 quality=100)
+      return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
+
 
 class Author(models.Model):
   name = models.CharField(max_length=200, primary_key=True)
+
+  def __str__(self):
+    return self.name
 
 
 class Tag(models.Model):
@@ -20,6 +36,9 @@ class Tag(models.Model):
 
   class Meta:
     unique_together = (("name", "type"),)
+
+  def __str__(self):
+      return self.name
 
 
 class Card(models.Model):
@@ -47,7 +66,19 @@ class Card(models.Model):
                                   blank=True)
   authors = models.ManyToManyField(Author, blank=True)
   publication_date = models.DateTimeField(auto_now_add=True)
-  tags = models.ManyToManyField(Tag)
+  tags = models.ManyToManyField(Tag, blank=True)
+
+  @property
+  def img_preview(self):
+      _thumbnail = get_thumbnail(self.cover_image.image,'300x300',
+                                 upscale=False,
+                                 crop=False,
+                                 quality=100)
+      return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
+
+
+  def __str__(self):
+      return _full_title(self.title, self.subtitle)
 
 
 class Article(models.Model):
@@ -56,6 +87,9 @@ class Article(models.Model):
   images = models.ManyToManyField(Image)
   card = models.ForeignKey(Card, on_delete=models.CASCADE, blank=False,
                            related_name="article")
+
+  def __str__(self):
+    return _full_title(self.card.title, self.card.subtitle)
 
 
 class Publication(models.Model):
@@ -67,6 +101,17 @@ class Publication(models.Model):
   cover_image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
   cards = models.ManyToManyField(Card)
   publication_date = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+      return _full_title(self.title, self.subtitle)
+
+  @property
+  def img_preview(self):
+      _thumbnail = get_thumbnail(self.cover_image.image,'300x300',
+                                 upscale=False,
+                                 crop=False,
+                                 quality=100)
+      return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
 
 
 class Region(models.Model):
