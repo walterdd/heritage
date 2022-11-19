@@ -16,7 +16,7 @@ pip3 install -r requirements.txt
 ```
 cd ./heritage
 python3 manage.py makemigrations
-python3 manage.py migrate
+python3 manage.py migrate --run-syncdb
 ```
 
 ### 2) Populate database with the test data
