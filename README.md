@@ -14,7 +14,7 @@ pip3 install -r requirements.txt
 ### 1) Set up a database
 
 ```
-cd ./heritage/webapp
+cd ./heritage
 python3 manage.py makemigrations
 python3 manage.py migrate
 ```
