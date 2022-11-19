@@ -50,6 +50,12 @@ Run the commandline below and follow the terminal prompts:
 python3 manage.py createsuperuser
 ```
 
+### 2) Collect static files
+
+```
+python manage.py collectstatic
+```
+
 ### 2) Run the server
 
 ```
