@@ -12,11 +12,14 @@ class Image(models.Model):
 
   @property
   def img_preview(self):
+    if self.image:
       _thumbnail = get_thumbnail(self.image,'300x300',
                                  upscale=False,
                                  crop=False,
                                  quality=100)
       return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
+    else:
+      return ""
 
 
 class Author(models.Model):
@@ -70,11 +73,14 @@ class Card(models.Model):
 
   @property
   def img_preview(self):
+    if self.cover_image and self.cover_image.image:
       _thumbnail = get_thumbnail(self.cover_image.image,'300x300',
                                  upscale=False,
                                  crop=False,
                                  quality=100)
       return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
+    else:
+      return ""
 
 
   def __str__(self):
@@ -107,11 +113,14 @@ class Publication(models.Model):
 
   @property
   def img_preview(self):
+    if self.cover_image and self.cover_image.image:
       _thumbnail = get_thumbnail(self.cover_image.image,'300x300',
                                  upscale=False,
                                  crop=False,
                                  quality=100)
       return format_html('<img src="{}" width="{}" height="{}">'.format(_thumbnail.url, _thumbnail.width, _thumbnail.height))
+    else:
+      return ""
 
 
 class Region(models.Model):
