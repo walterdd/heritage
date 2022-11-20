@@ -16,7 +16,7 @@ class LandingPage(View):
     cards = Card.objects.all().order_by("publication_date")
 
     it_paginator = Paginator(itineraries, 4, allow_empty_first_page=True)
-    text_paginator = Paginator(cards, 3, allow_empty_first_page=True)
+    text_paginator = Paginator(cards, 9, allow_empty_first_page=True)
     itineraries = it_paginator.get_page(it_page)
     cards = text_paginator.get_page(text_page)
 
